@@ -1,1 +1,6 @@
 /* You can add global styles to this file, and also import other style files */
+.menu-position-side.menu-w.menu-layout-mini{
+	height:100% !important;
+    min-height: 100vh;
+}
+

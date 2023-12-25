@@ -1,0 +1,172 @@
+<div class="row">
+    <div class="col-sm-5">
+        <div class="user-profile compact">
+            <div class="up-head-w" style="background-image:url(assets/img/profile_bg1.jpg)">
+                <div class="up-main-info">
+                    <h2 class="up-header">
+                        {{user.firstName}} {{user.lastName}}
+                    </h2>
+                    <h6 class="up-sub-header">
+                        {{user.nameRole}}
+                    </h6>
+                </div>
+                <svg class="decor" width="842px" height="219px" viewBox="0 0 842 219"
+                    preserveAspectRatio="xMaxYMax meet" version="1.1" xmlns="http://www.w3.org/2000/svg"
+                    xmlns:xlink="http://www.w3.org/1999/xlink">
+                    <g transform="translate(-381.000000, -362.000000)" fill="#FFFFFF">
+                        <path class="decor-path"
+                            d="M1223,362 L1223,581 L381,581 C868.912802,575.666667 1149.57947,502.666667 1223,362 Z">
+                        </path>
+                    </g>
+                </svg>
+            </div>
+            <div class="up-controls">
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="value-pair">
+                            <div class="label">
+                                Status:
+                            </div>
+                            <div class="value badge badge-pill" [class.badge-success]="user.active"
+                                [class.badge-danger]="!user.active">
+                                {{user.active ? "Active":"Inactive"}}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 text-right">
+                        <a class="btn btn-primary btn-sm" href=""><i class="os-icon os-icon-link-3"></i><span>Change
+                                image</span></a>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <div class="col-sm-7">
+        <div class="element-wrapper">
+            <div class="element-box">
+                <form #userForm="ngForm" (ngSubmit)="updateUser()">
+                    <div class="element-info">
+                        <div class="element-info-with-icon">
+                            <div class="element-info-icon">
+                                <div class="os-icon os-icon-wallet-loaded"></div>
+                            </div>
+                            <div class="element-info-text">
+                                <h5 class="element-inner-header">
+                                    Update an account user
+                                </h5>
+                            </div>
+                        </div>
+                    </div>
+                    <fieldset class="form-group">
+                        <legend><span>Account settings</span></legend>
+                        <div class="form-group">
+                            <label for=""> Email address</label><input class="form-control" placeholder="Enter email"
+                                required="required" type="email" [disabled]="false" name="email" appEmailValidator
+                                [(ngModel)]="user.email" #email="ngModel" disabled>
+                            <div class="text-danger" *ngIf="email.invalid && (email.touched || email.dirty)">
+                                <div *ngIf="email.errors?.['required']">Your email address is required
+                                </div>
+                                <div *ngIf="!email.errors?.['required'] && email.errors?.['emailValidator']">Your email
+                                    address is
+                                    invalid</div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label for=""> First Name</label><input class="form-control"
+                                        placeholder="First Name" [(ngModel)]="user.firstName" name="firstName"
+                                        #firstName="ngModel" required minlength="3" maxlength="12" type="text">
+
+                                    <div class="text-danger"
+                                        *ngIf="firstName.invalid && (firstName.touched || firstName.dirty)">
+                                        <div *ngIf="firstName.errors?.['required']">Your first name is required</div>
+                                        <div *ngIf="firstName.errors?.['minlength']">Min length is 3</div>
+                                        <div *ngIf="firstName.errors?.['maxlength']">Max length is 12</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label for="">Last Name</label><input class="form-control" placeholder="Last Name"
+                                        [(ngModel)]="user.lastName" name="lastName" #lastName="ngModel" required
+                                        minlength="3" max="12" type="text">
+                                    <div class="text-danger"
+                                        *ngIf="lastName.invalid && (lastName.touched || lastName.dirty)">
+                                        <div *ngIf="lastName.errors?.['required']">Your last name is required</div>
+                                        <div *ngIf="lastName.errors?.['minlength']">Min length is 3</div>
+                                        <div *ngIf="lastName.errors?.['maxlength']">Max length is 12</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <!-- <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label for=""> Date of Birth</label><input class="single-daterange form-control"
+                                        placeholder="Date of birth" type="text" value="04/12/1995">
+                                </div>
+                            </div> -->
+                            <div class="col-sm-12">
+                                <div class="form-group">
+                                    <label for="">Phone number</label>
+                                    <input class="form-control" [(ngModel)]="user.phoneNumber" name="phoneNumber"
+                                        #phoneNumber="ngModel" placeholder="Phone number" required minlength="8"
+                                        maxlength="12" type="text">
+                                    <div class="text-danger"
+                                        *ngIf="phoneNumber.invalid && (phoneNumber.dirty || phoneNumber.touched)">
+                                        <div *ngIf="phoneNumber.errors?.['required']">Your phone number is required
+                                        </div>
+                                        <div
+                                            *ngIf="phoneNumber.errors?.['minlength']|| phoneNumber.errors?.['maxlength']">
+                                            Your phone number is invalid</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label for=""> Type</label>
+                                    <select class="form-control" [(ngModel)]="user.idRole" name="idRole">
+                                        <option *ngFor="let role of roles" [value]="role.id" [disabled]="!role.active">
+                                            {{role.nameRole}}
+                                        </option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label for=""> Status</label>
+                                    <select class="form-control" [(ngModel)]="user.active" name="active"
+                                        aria-label="Default select example">
+                                        <option [value]="true">
+                                            Active
+                                        </option>
+                                        <option [value]="false">
+                                            Inactive
+                                        </option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- <div class="row">
+                            <div class="col-sm-12">
+                                <label class="mb-2">Image :</label>
+                                <input type="file" (change)="onImageUpload($event)" class="form-control">
+                            </div>
+                        </div> -->
+                        <!-- <div class="col-sm-16 col-md-16 col-lg-16">
+                            <img [src]="myImage" class="card-img-top img-fluid rounded-start"
+                                style="width: 500px; height: 300px" />
+                        </div> -->
+                    </fieldset>
+                    <div class="form-buttons-w">
+                        <button class="btn btn-success" [disabled]="userForm.invalid" type="submit"> Submit</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

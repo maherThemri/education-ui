@@ -1,0 +1,144 @@
+<div class="row pt-4">
+    <div class="col-sm-12">
+        <div class="element-wrapper">
+            <h6 class="element-header">
+                Roles
+                <div class="element-actions d-none d-sm-block">
+                    <button class="btn btn-primary btn-sm" data-target="#exampleModal1" data-toggle="modal"><i
+                            class="os-icon os-icon-ui-22"></i>
+                        <span>Add New Role</span></button>
+                </div>
+            </h6>
+            <div class="element-box-tp">
+                <div class="table-responsive">
+                    <table class="table table-padded">
+                        <thead>
+                            <tr>
+                                <th>
+                                    Roles
+                                </th>
+                                <th>
+                                    Status
+                                </th>
+                                <th>
+                                    Actions
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let role of roles">
+                                <td>
+                                    {{role.nameRole}}
+                                </td>
+                                <td>
+                                    <a class="badge badge-success-inverted" [class.badge-success-inverted]="role.active"
+                                        [class.badge-danger-inverted]="!role.active" href="">{{role.active ?
+                                        "Active":"Inactive"}}</a>
+                                </td>
+
+                                <td class="row-actions text-left">
+                                    <a href="javascript:void(0)" (click)="updateRoleState(role.id, role.active)">
+                                        <i [ngClass]="role.active ? 'fa fa-toggle-on' : 'fa fa-toggle-off'"></i>
+                                    </a>
+                                    <a href="javascript:void(0)" data-target="#update" data-toggle="modal"
+                                        (click)="findRoleById(role.id)"><i class="fa fa-pencil-square-o"></i></a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal add new role -->
+<div aria-hidden="true" aria-labelledby="exampleModalLabel" class="modal fade" id="exampleModal1" role="dialog"
+    tabindex="-1" data-backdrop="static">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">
+                    Add Role
+                </h5>
+            </div>
+            <div class="modal-body">
+                <form [formGroup]="roleForm">
+                    <div class="form-group">
+                        <label for=""> Role name</label>
+                        <input class="form-control" placeholder="Enter Role" type="text" formControlName="nameRole">
+                        <div class="text-danger"
+                            *ngIf="roleForm.controls['nameRole'].invalid && (roleForm.controls['nameRole'].dirty || roleForm.controls['nameRole'].touched)">
+                            <div *ngIf="roleForm.controls['nameRole'].errors?.['required']"> Required </div>
+                            <div *ngIf="roleForm.controls['nameRole'].errors?.['minlength']"> Min lenght 3 </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for=""> Status</label>
+                        <select class="form-control" formControlName="active" aria-label="Default select example">
+                            <option selected disabled>
+                                Choose
+                            </option>
+                            <option [value]="true">
+                                Active
+                            </option>
+                            <option [value]="false">
+                                Inactive
+                            </option>
+                        </select>
+                        <div class="text-danger"
+                            *ngIf="roleForm.controls['active'].invalid && (roleForm.controls['active'].dirty || roleForm.controls['active'].touched)">
+                            <div *ngIf="roleForm.controls['active'].errors?.['required']"> Required </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-danger" data-dismiss="modal" type="button"> Close</button>
+                <button class="btn btn-success" type="button" [disabled]="roleForm.invalid" data-dismiss="modal"
+                    (click)="addRole()">
+                    Save</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Modal update role -->
+<div aria-hidden="true" aria-labelledby="updateLabel" class="modal fade" id="update" role="dialog" tabindex="-1"
+    data-backdrop="static">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="updateLabel">
+                    Update Role
+                </h5>
+            </div>
+            <div class="modal-body">
+                <form #roleFormm="ngForm" (ngSubmit)="updateRole()">
+                    <div class="form-group">
+                        <label for="nameRole">Role name</label>
+                        <input class="form-control" placeholder="Enter Role" type="text" name="nameRole"
+                            [(ngModel)]="role.nameRole" #nameRole="ngModel" required minlength="3">
+                        <div class="text-danger" *ngIf="nameRole.invalid && nameRole.touched">
+                            <div *ngIf="nameRole.errors && nameRole.errors['required']">Required</div>
+                            <div *ngIf="nameRole.errors && nameRole.errors['minlength']">Min length is 3</div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="active">Status</label>
+                        <select class="form-control" name="active" [(ngModel)]="role.active" #active="ngModel" required>
+                            <option [value]="true">Active</option>
+                            <option [value]="false">Inactive</option>
+                        </select>
+                        <div class="text-danger" *ngIf="active.invalid && active.touched">
+                            <div *ngIf="active.errors && active.errors['required']">Required</div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-danger" data-dismiss="modal" type="button">Close</button>
+                        <button class="btn btn-success" type="submit" [disabled]="roleFormm.invalid">Save</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
